@@ -33,9 +33,9 @@ website:
 Helpful commands to check various AWS services are configured properly.
 
 ```shell
-send:test-mail
+check:s3
 
-list:s3-files
+check:mail
 ```
 
 ## Installation

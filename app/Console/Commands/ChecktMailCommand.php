@@ -5,9 +5,9 @@ namespace App\Console\Commands;
 use App\Jobs\TestJob;
 use Illuminate\Console\Command;
 
-class SendTestMailCommand extends Command
+class ChecktMailCommand extends Command
 {
-    protected $signature = 'send:test-mail';
+    protected $signature = 'check:mail';
 
     protected $description = 'Send a test job to the queue';
 

@@ -5,9 +5,9 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-class ListS3FilesCommand extends Command
+class CheckS3Command extends Command
 {
-    protected $signature = 'list:s3-files';
+    protected $signature = 'check:s3';
 
     protected $description = 'List all the files in the s3 bucket';
 
