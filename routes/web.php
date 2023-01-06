@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('cache', function () {
+
+    $cached = Cache::remember('cache-test', 10, function () {
+        return Carbon::now();
+    });
+
+    return response()->json([
+        "cached" =>  $cached->diffForHumans(),
+        "now" => Carbon::now()->diffForHumans()
+    ]);
 });
