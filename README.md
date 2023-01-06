@@ -40,18 +40,18 @@ You can test the artisan lambda with the following command.
 bref cli bref-demo-dev-artisan -- inspire
 ```
 
-### Testing the SQS Queue
-Test the queue with the following command:
-
-```shell
-bref cli bref-demo-dev-artisan -- check:mail
-```
-
 ### Testing the database
 If you are using Postgres, make sure to copy the `php/conf.d/php.ini` file.
 
 ```shell
 bref cli bref-demo-dev-artisan -- check:database
+```
+
+### Testing the SQS Queue
+Test the queue with the following command:
+
+```shell
+bref cli bref-demo-dev-artisan -- check:mail
 ```
 
 ### Testing the Cache Driver
@@ -80,7 +80,7 @@ aws ssm put-parameter --region ap-southeast-2 --name '/bref-demo-dev/MIX_ASSET_U
 
 ## Deployment
 
-### Make sure the following variables are set within GitHub Action Secrets.
+Make sure the following variables are set within GitHub Action Secrets.
 
 ```dotenv
 AWS_ACCESS_KEY_ID=
