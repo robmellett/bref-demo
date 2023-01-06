@@ -4,7 +4,9 @@ A test project to see how Bref.sh works with Laravel.
 Install the following packages:
 
 ```shell
-composer require bref/bref bref/laravel-bridge
+composer require bref/bref bref/laravel-bridge --update-with-dependencies
+
+php artisan vendor:publish --tag=serverless-config
 ```
 
 ## Testing the CLI
