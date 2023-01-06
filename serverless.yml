@@ -25,6 +25,9 @@ provider:
     DB_USERNAME: ${ssm:/bref-demo-dev/DB_USERNAME}
     DB_PASSWORD: ${ssm:/bref-demo-dev/DB_PASSWORD}
 
+    QUEUE_CONNECTION: sqs
+    SQS_QUEUE: ${construct:jobs.queueUrl}
+
     MAIL_MAILER: mailgun
     MAILGUN_DOMAIN: mail.robmellett.com
     MAILGUN_SECRET: ${ssm:/bref-demo-dev/MAILGUN_SECRET}
@@ -86,6 +89,13 @@ constructs:
       # Other Headers (e.g. Livewire, Laravel Nova), uncomment based on your needs
       # - X-Livewire
       # - X-Inertia
+
+  jobs:
+    type: queue
+    worker:
+      handler: worker.php
+      layers:
+        - ${bref:layer.php-81}
 
 plugins:
   - ./vendor/bref/bref
