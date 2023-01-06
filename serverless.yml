@@ -25,6 +25,10 @@ provider:
     DB_USERNAME: ${ssm:/bref-demo-dev/DB_USERNAME}
     DB_PASSWORD: ${ssm:/bref-demo-dev/DB_PASSWORD}
 
+    MAIL_MAILER: mailgun
+    MAILGUN_DOMAIN: mail.robmellett.com
+    MAILGUN_SECRET: ${ssm:/bref-demo-dev/MAILGUN_SECRET}
+
     AWS_BUCKET: ${construct:website.assetsBucketName}
     FILESYSTEM_DISK: 's3'
 

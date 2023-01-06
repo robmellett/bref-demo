@@ -55,8 +55,9 @@ bref cli bref-demo-dev-artisan -- check:queue
 ```
 
 ### Testing the Mail Driver
-
-
+```shell
+bref cli bref-demo-dev-artisan -- check:mail
+```
 
 ### Testing the Cache Driver
 View the [cache](https://bref-demo.robmellett.dev/cache) route, and you should see the current server time.  Refresh a few seconds later and `cached` variable should be in the past.
