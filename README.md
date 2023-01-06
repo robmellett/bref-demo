@@ -28,6 +28,16 @@ website:
   cname: *********.cloudfront.net
 ```
 
+## Artisan Commands
+
+Helpful commands to check various AWS sevices are configured properly.
+
+```shell
+send:test-mail
+
+list:s3-files
+```
+
 ## Installation
 Install the following packages:
 
