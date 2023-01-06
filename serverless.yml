@@ -32,8 +32,18 @@ provider:
     MAILGUN_DOMAIN: mail.robmellett.com
     MAILGUN_SECRET: ${ssm:/bref-demo-dev/MAILGUN_SECRET}
 
-    AWS_BUCKET: ${construct:website.assetsBucketName}
+    AWS_BUCKET: !Ref Storage
     FILESYSTEM_DISK: 's3'
+
+  iam:
+    role:
+      statements:
+        # Allow Lambda to read and write files in the S3 buckets
+        - Effect: Allow
+          Action: s3:*
+          Resource:
+            - !Sub '${Storage.Arn}' # the storage bucket
+            - !Sub '${Storage.Arn}/*' # and everything inside
 
 package:
   # Directories to exclude from deployment
@@ -96,6 +106,11 @@ constructs:
       handler: worker.php
       layers:
         - ${bref:layer.php-81}
+
+resources:
+  Resources:
+    Storage:
+      Type: AWS::S3::Bucket
 
 plugins:
   - ./vendor/bref/bref
