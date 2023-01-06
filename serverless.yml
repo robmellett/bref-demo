@@ -1,40 +1,81 @@
-service: laravel
+service: bref-demo
 
 provider:
-    name: aws
-    # The AWS region in which to deploy (us-east-1 is the default)
-    region: us-east-1
-    # The stage of the application, e.g. dev, production, staging… ('dev' is the default)
-    stage: dev
-    runtime: provided.al2
-    lambdaHashingVersion: 20201221
+  name: aws
+
+  # The AWS region in which to deploy (us-east-1 is the default)
+  region: ap-southeast-2
+
+  # The stage of the application, e.g. dev, production, staging… ('dev' is the default)
+  stage: dev
+  runtime: provided.al2
+
+  versionFunctions: false
+
+  environment:
+    APP_ENV: ${ssm:/bref-demo-dev/APP_ENV}
+    APP_URL: ${ssm:/bref-demo-dev/APP_URL}
+    APP_DEBUG: ${ssm:/bref-demo-dev/APP_DEBUG}
+    APP_KEY: ${ssm:/bref-demo-dev/APP_KEY}
+
+    AWS_BUCKET: ${construct:website.assetsBucketName}
+    FILESYSTEM_DISK: 's3'
 
 package:
-    # Directories to exclude from deployment
-    patterns:
-        - '!node_modules/**'
-        - '!public/storage'
-        - '!resources/assets/**'
-        - '!storage/**'
-        - '!tests/**'
+  # Directories to exclude from deployment
+  exclude:
+    - node_modules/**
+    - public/storage
+    - resources/assets/**
+    - storage/**
+    - tests/**
 
 functions:
-    # This function runs the Laravel website/API
-    web:
-        handler: public/index.php
-        timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
-        layers:
-            - ${bref:layer.php-80-fpm}
-        events:
-            - httpApi: '*'
-    # This function lets us run artisan commands in Lambda
-    artisan:
-        handler: artisan
-        timeout: 120 # in seconds
-        layers:
-            - ${bref:layer.php-80} # PHP
-            - ${bref:layer.console} # The "console" layer
+  # This function runs the Laravel website/API
+  web:
+    handler: public/index.php
+    timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
+    layers:
+      - ${bref:layer.php-81-fpm}
+    events:
+      -   httpApi: '*'
+
+  # This function lets us run artisan commands in Lambda
+  artisan:
+    handler: artisan
+    timeout: 120 # in seconds
+    layers:
+      - ${bref:layer.php-81} # PHP
+      - ${bref:layer.console} # The "console" layer
+
+constructs:
+  website:
+    type: server-side-website
+    domain: bref-demo.robmellett.dev
+    certificate: arn:aws:acm:us-east-1:257920988106:certificate/e84ceda9-9956-4cb3-bff5-cafaaa643bc8
+    assets:
+      '/build/*': 'public/build'
+      '/favicon.ico': public/favicon.ico
+      '/robots.txt': public/robots.txt
+      # add here any file or directory that needs to be served from S3
+    # Laravel uses some headers that are not in CloudFront's default whitelist.
+    # To add any, we need to list all accepted headers to pass through.
+    # https://github.com/getlift/lift/blob/master/docs/server-side-website.md#forwarded-headers
+    forwardedHeaders:
+      - Accept
+      - Accept-Language
+      - Content-Type
+      - Origin
+      - Referer
+      - User-Agent
+      - X-Forwarded-Host
+      - X-Requested-With
+      # Laravel Framework Headers
+      - X-Csrf-Token
+      # Other Headers (e.g. Livewire, Laravel Nova), uncomment based on your needs
+      # - X-Livewire
+      # - X-Inertia
 
 plugins:
-    # We need to include the Bref plugin
-    - ./vendor/bref/bref
+  - ./vendor/bref/bref
+  - serverless-lift
