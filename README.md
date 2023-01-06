@@ -5,6 +5,29 @@ A test project to see how [Bref.sh](https://bref.sh/docs/frameworks/laravel.html
 
 You can view the serverless deployment at [https://bref-demo.robmellett.dev/](https://bref-demo.robmellett.dev/)
 
+Can you can view the deployment with
+
+```shell
+serverless info
+```
+
+Which will output the following infomation.
+
+```shell
+Running "serverless" from node_modules
+service: bref-demo
+stage: dev
+region: ap-southeast-2
+stack: bref-demo-dev
+endpoint: ANY - https://*********.execute-api.ap-southeast-2.amazonaws.com
+functions:
+  web: bref-demo-dev-web
+  artisan: bref-demo-dev-artisan
+website:
+  url: https://bref-demo.robmellett.dev
+  cname: *********.cloudfront.net
+```
+
 ## Installation
 Install the following packages:
 
