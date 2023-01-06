@@ -2,17 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\TestJob;
+use App\Jobs\TestQueueJob;
 use Illuminate\Console\Command;
 
-class ChecktMailCommand extends Command
+class CheckQueueCommand extends Command
 {
-    protected $signature = 'check:mail';
+    protected $signature = 'check:queue';
 
     protected $description = 'Send a test job to the queue';
 
     public function handle()
     {
-        dispatch(new TestJob());
+        dispatch(new TestQueueJob());
     }
 }
