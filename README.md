@@ -30,7 +30,7 @@ website:
 
 ## Artisan Commands
 
-Helpful commands to check various AWS sevices are configured properly.
+Helpful commands to check various AWS services are configured properly.
 
 ```shell
 send:test-mail
