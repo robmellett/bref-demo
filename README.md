@@ -1,6 +1,11 @@
 # About
 A test project to see how [Bref.sh](https://bref.sh/docs/frameworks/laravel.html) works with Laravel.
 
+## View Deployment
+
+You can view the serverless deployment at [https://bref-demo.robmellett.dev/](https://bref-demo.robmellett.dev/)
+
+## Installation
 Install the following packages:
 
 ```shell
