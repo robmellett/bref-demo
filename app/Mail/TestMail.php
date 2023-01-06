@@ -15,7 +15,7 @@ class TestMail extends Mailable
 
     public function envelope(): Envelope
     {
-        $environment = App::environment();
+        $environment = str(App::environment())->upper();
 
         return new Envelope(
             to: 'dev@robmellett.com',
