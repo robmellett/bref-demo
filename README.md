@@ -33,9 +33,9 @@ website:
 Helpful commands to check various AWS services are configured properly.
 
 ```shell
-check:s3
+bref cli bref-demo-dev-artisan -- check:s3
 
-check:mail
+bref cli bref-demo-dev-artisan -- check:mail
 ```
 
 ## Installation
