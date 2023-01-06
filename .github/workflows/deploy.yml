@@ -42,7 +42,7 @@ jobs:
           composer-options: "--prefer-dist --optimize-autoloader --no-dev"
       - run: composer require bref/bref
 
-      - name: serverless deploy
+      - name: Serverless Deploy
         uses: serverless/github-action@master
         with:
           args: deploy
@@ -50,11 +50,11 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-#      - name: Upload Assets & Run Migrations
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-#          AWS_PUBLIC_BUCKET: ${{ secrets.AWS_PUBLIC_BUCKET }}
-#        run: |
-#          ./vendor/bin/bref cli bref-demo-dev-artisan -- migrate --force
+      - name: Upload Assets & Run Migrations
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          # AWS_PUBLIC_BUCKET: ${{ secrets.AWS_PUBLIC_BUCKET }}
+        run: |
+          ./vendor/bin/bref cli bref-demo-dev-artisan -- migrate --force
