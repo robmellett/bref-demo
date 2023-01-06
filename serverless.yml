@@ -18,6 +18,13 @@ provider:
     APP_DEBUG: ${ssm:/bref-demo-dev/APP_DEBUG}
     APP_KEY: ${ssm:/bref-demo-dev/APP_KEY}
 
+    DB_CONNECTION: ${ssm:/bref-demo-dev/DB_CONNECTION}
+    DB_HOST: ${ssm:/bref-demo-dev/DB_HOST}
+    DB_PORT: ${ssm:/bref-demo-dev/DB_PORT}
+    DB_DATABASE: ${ssm:/bref-demo-dev/DB_DATABASE}
+    DB_USERNAME: ${ssm:/bref-demo-dev/DB_USERNAME}
+    DB_PASSWORD: ${ssm:/bref-demo-dev/DB_PASSWORD}
+
     AWS_BUCKET: ${construct:website.assetsBucketName}
     FILESYSTEM_DISK: 's3'
 

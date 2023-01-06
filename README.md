@@ -1,17 +1,17 @@
 # About
 A test project to see how [Bref.sh](https://bref.sh/docs/frameworks/laravel.html) works with Laravel.
 
-## View Deployment
+## View Serverless Deployment
 
 You can view the serverless deployment at [https://bref-demo.robmellett.dev/](https://bref-demo.robmellett.dev/)
 
-Can you can view the deployment with
+Can you can view the deployment with the following command.
 
 ```shell
 serverless info
 ```
 
-Which will output the following infomation.
+Which will output the following information.
 
 ```shell
 Running "serverless" from node_modules
@@ -28,15 +28,34 @@ website:
   cname: *********.cloudfront.net
 ```
 
-## Artisan Commands
+### Testing the Web Lambda
 
-Helpful commands to check various AWS services are configured properly.
+You can view the web lambda at [https://bref-demo.robmellett.dev/](https://bref-demo.robmellett.dev/).
+
+### Testing the CLI Lambda
+
+You can test the artisan lambda with the following command.
 
 ```shell
-bref cli bref-demo-dev-artisan -- check:s3
+bref cli bref-demo-dev-artisan -- inspire
+```
 
+### Testing the SQS Queue
+Test the queue with the following command:
+
+```shell
 bref cli bref-demo-dev-artisan -- check:mail
 ```
+
+### Testing the database
+If you are using Postgres, make sure to copy the `php/conf.d/php.ini` file.
+
+```shell
+bref cli bref-demo-dev-artisan -- check:database
+```
+
+### Testing the Cache Driver
+View the [cache](https://bref-demo.robmellett.dev/cache) route, and you should see the current server time.  Refresh a few seconds later and `cached` variable should be in the past.
 
 ## Installation
 Install the following packages:
@@ -47,33 +66,21 @@ composer require bref/bref bref/laravel-bridge --update-with-dependencies
 php artisan vendor:publish --tag=serverless-config
 ```
 
-## Testing the CLI
-`bref cli bref-demo-dev-artisan -- inspire`
+### Adding Secrets to the Serverless Environment
 
-## Testing the SQS Queue
-Test the queue with the following command:
+```shell
+aws ssm put-parameter --region ap-southeast-2 --name '/bref-demo-dev/my-parameter' --type String --value 'mysecretvalue'
+```
 
-Set the env variable:
+### Configuring Assets
 
-`MAIL_TO_ADDRESS="your-test@email.com"`
+```shell
+aws ssm put-parameter --region ap-southeast-2 --name '/bref-demo-dev/MIX_ASSET_URL' --type String --value '"https://<bucket-name>.s3.amazonaws.com'"`
+```
 
-Dispatch the test job with the following command.  If all is well, you will receive an email.
+## Deployment
 
-`AWS_DEFAULT_REGION=ap-southeast-2 bref cli bref-demo-dev-artisan -- test:queue`
-
-## Testing the database
-If you are using Postgres, make sure to copy the `php/conf.d/php.ini` file.
-
-## Testing the Cache Driver
-View the `/cache` route, and you should see the current server time.  Refresh a few seconds later and `cached` variable should be in the past.
-
-## Adding new env variables to the serverless env
-`aws ssm put-parameter --region ap-southeast-2 --name '/bref-demo-dev/my-parameter' --type String --value 'mysecretvalue'`
-
-## Configuring Assets
-`aws ssm put-parameter --region ap-southeast-2 --name '/bref-demo-dev/MIX_ASSET_URL' --type String --value '"https://<bucket-name>.s3.amazonaws.com'"`
-
-## Make sure the following variables are set within GitHub Action Secrets.
+### Make sure the following variables are set within GitHub Action Secrets.
 
 ```dotenv
 AWS_ACCESS_KEY_ID=
@@ -83,6 +90,8 @@ AWS_PUBLIC_BUCKET=
 ```
 
 ## Creating the Domain Name (legacy)
+
+This is no longer required since the `serverless-lift` plugin is installed.
 
 ```shell
 npm install serverless-domain-manager --save-dev
@@ -103,7 +112,7 @@ custom:
     region: ${self:provider.region}
 ```
 
-Create the Serverless Domain
+Create the Serverless Domain with the following command.
 
 ```shell
 sls create_domain
