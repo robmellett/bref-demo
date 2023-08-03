@@ -31,7 +31,7 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm run build
+        run: npm run production
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -56,4 +56,5 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           # AWS_PUBLIC_BUCKET: ${{ secrets.AWS_PUBLIC_BUCKET }}
         run: |
-          ./vendor/bin/bref cli bref-demo-dev-artisan -- migrate --force
+          serverless bref:cli --args="migrate --force"
+
