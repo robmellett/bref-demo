@@ -3,10 +3,23 @@ service: laravel
 provider:
     name: aws
     # The AWS region in which to deploy (us-east-1 is the default)
-    region: us-east-1
+    region: ap-southeast-2
+
+    versionFunctions: false
+
     # Environment variables
     environment:
         APP_ENV: production # Or use ${sls:stage} if you want the environment to match the stage
+        APP_URL: ${ssm:/bref-demo-dev/APP_URL}
+        APP_DEBUG: ${ssm:/bref-demo-dev/APP_DEBUG}
+        APP_KEY: ${ssm:/bref-demo-dev/APP_KEY}
+
+        DB_CONNECTION: ${ssm:/bref-demo-dev/DB_CONNECTION}
+        DB_HOST: ${ssm:/bref-demo-dev/DB_HOST}
+        DB_PORT: ${ssm:/bref-demo-dev/DB_PORT}
+        DB_DATABASE: ${ssm:/bref-demo-dev/DB_DATABASE}
+        DB_USERNAME: ${ssm:/bref-demo-dev/DB_USERNAME}
+        DB_PASSWORD: ${ssm:/bref-demo-dev/DB_PASSWORD}
 
 package:
     # Files and directories to exclude from deployment
