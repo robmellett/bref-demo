@@ -50,11 +50,14 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Upload Assets & Run Migrations
+        uses: serverless/github-action@master
+        with:
+          args: -c "serverless bref:cli --args='migrate --force'"
+          entrypoint: /bin/bash
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           # AWS_PUBLIC_BUCKET: ${{ secrets.AWS_PUBLIC_BUCKET }}
-        run: |
-          serverless bref:cli --args="migrate --force"
+
 
