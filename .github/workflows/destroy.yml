@@ -6,12 +6,12 @@ concurrency:
   group: deployment
 
 jobs:
-  deploy:
-    name: deploy
+  destroy:
+    name: destroy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Serverless Deploy
+      - name: Destroy the deployed service in AWS
         uses: serverless/github-action@master
         with:
           args: remove
