@@ -1,4 +1,4 @@
-service: laravel
+service: bref-demo-dev
 
 provider:
     name: aws
