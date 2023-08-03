@@ -114,3 +114,12 @@ resources:
 plugins:
   - ./vendor/bref/bref
   - serverless-lift
+  - serverless-domain-manager
+
+
+custom:
+  customDomain:
+    domainName: bref-demo.robmellett.dev
+    basePath: ''
+    stage: ${sls:stage}
+    createRoute53Record: true
