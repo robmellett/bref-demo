@@ -8,6 +8,7 @@
     "devDependencies": {
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.7.5",
+        "serverless-lift": "^1.27.0",
         "vite": "^4.0.0"
     }
 }
