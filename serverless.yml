@@ -99,6 +99,18 @@ constructs:
       # - X-Livewire
       # - X-Inertia
 
+  jobs:
+    type: queue
+    worker:
+      handler: Bref\LaravelBridge\Queue\QueueHandler
+      runtime: php-81
+      timeout: 60 # seconds
+
+resources:
+  Resources:
+    Storage:
+      Type: AWS::S3::Bucket
+
 plugins:
   - ./vendor/bref/bref
   - serverless-lift
