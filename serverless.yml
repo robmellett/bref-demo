@@ -21,6 +21,26 @@ provider:
         DB_USERNAME: ${ssm:/bref-demo-dev/DB_USERNAME}
         DB_PASSWORD: ${ssm:/bref-demo-dev/DB_PASSWORD}
 
+        QUEUE_CONNECTION: sqs
+        SQS_QUEUE: ${construct:jobs.queueUrl}
+
+        MAIL_MAILER: mailgun
+        MAILGUN_DOMAIN: mail.robmellett.com
+        MAILGUN_SECRET: ${ssm:/bref-demo-dev/MAILGUN_SECRET}
+
+        AWS_BUCKET: !Ref Storage
+        FILESYSTEM_DISK: 's3'
+
+    iam:
+      role:
+        statements:
+          # Allow Lambda to read and write files in the S3 buckets
+          - Effect: Allow
+            Action: s3:*
+            Resource:
+              - !Sub '${Storage.Arn}' # the storage bucket
+              - !Sub '${Storage.Arn}/*' # and everything inside
+
 package:
     # Files and directories to exclude from deployment
     patterns:
@@ -50,6 +70,34 @@ functions:
         #    - schedule:
         #          rate: rate(1 minute)
         #          input: '"schedule:run"'
+
+constructs:
+  website:
+    type: server-side-website
+    domain: bref-demo.robmellett.dev
+    certificate: arn:aws:acm:us-east-1:257920988106:certificate/e84ceda9-9956-4cb3-bff5-cafaaa643bc8
+    assets:
+      '/build/*': 'public/build'
+      '/favicon.ico': public/favicon.ico
+      '/robots.txt': public/robots.txt
+      # add here any file or directory that needs to be served from S3
+    # Laravel uses some headers that are not in CloudFront's default whitelist.
+    # To add any, we need to list all accepted headers to pass through.
+    # https://github.com/getlift/lift/blob/master/docs/server-side-website.md#forwarded-headers
+    forwardedHeaders:
+      - Accept
+      - Accept-Language
+      - Content-Type
+      - Origin
+      - Referer
+      - User-Agent
+      - X-Forwarded-Host
+      - X-Requested-With
+      # Laravel Framework Headers
+      - X-Csrf-Token
+      # Other Headers (e.g. Livewire, Laravel Nova), uncomment based on your needs
+      # - X-Livewire
+      # - X-Inertia
 
 plugins:
   - ./vendor/bref/bref
