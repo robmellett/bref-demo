@@ -74,7 +74,7 @@ functions:
 constructs:
   website:
     type: server-side-website
-    domain: bref-demo.robmellett.dev
+    domain: bref-demo-dev.robmellett.dev
     certificate: arn:aws:acm:us-east-1:257920988106:certificate/e84ceda9-9956-4cb3-bff5-cafaaa643bc8
     assets:
       '/build/*': 'public/build'
