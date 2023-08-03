@@ -40,7 +40,6 @@ jobs:
       - uses: "ramsey/composer-install@v2"
         with:
           composer-options: "--prefer-dist --optimize-autoloader --no-dev"
-      - run: composer require bref/bref
 
       - name: Serverless Deploy
         uses: serverless/github-action@master
