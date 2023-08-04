@@ -1,75 +1,74 @@
 service: bref-demo
 
 provider:
-    name: aws
-    # The AWS region in which to deploy (us-east-1 is the default)
-    region: ap-southeast-2
+  name: aws
+  # The AWS region in which to deploy (us-east-1 is the default)
+  region: ap-southeast-2
 
-    versionFunctions: false
+  versionFunctions: false
 
-    # Environment variables
-    environment:
-        APP_ENV: production # Or use ${sls:stage} if you want the environment to match the stage
-        APP_URL: ${ssm:/bref-demo-dev/APP_URL}
-        APP_DEBUG: ${ssm:/bref-demo-dev/APP_DEBUG}
-        APP_KEY: ${ssm:/bref-demo-dev/APP_KEY}
+  # Environment variables
+  environment:
+    APP_ENV: production # Or use ${sls:stage} if you want the environment to match the stage
+    APP_URL: ${ssm:/bref-demo-dev/APP_URL}
+    APP_DEBUG: ${ssm:/bref-demo-dev/APP_DEBUG}
+    APP_KEY: ${ssm:/bref-demo-dev/APP_KEY}
 
-        DB_CONNECTION: ${ssm:/bref-demo-dev/DB_CONNECTION}
-        DB_HOST: ${ssm:/bref-demo-dev/DB_HOST}
-        DB_PORT: ${ssm:/bref-demo-dev/DB_PORT}
-        DB_DATABASE: ${ssm:/bref-demo-dev/DB_DATABASE}
-        DB_USERNAME: ${ssm:/bref-demo-dev/DB_USERNAME}
-        DB_PASSWORD: ${ssm:/bref-demo-dev/DB_PASSWORD}
+    DB_CONNECTION: ${ssm:/bref-demo-dev/DB_CONNECTION}
+    DB_HOST: ${ssm:/bref-demo-dev/DB_HOST}
+    DB_PORT: ${ssm:/bref-demo-dev/DB_PORT}
+    DB_DATABASE: ${ssm:/bref-demo-dev/DB_DATABASE}
+    DB_USERNAME: ${ssm:/bref-demo-dev/DB_USERNAME}
+    DB_PASSWORD: ${ssm:/bref-demo-dev/DB_PASSWORD}
 
-        QUEUE_CONNECTION: sqs
-        SQS_QUEUE: ${construct:jobs.queueUrl}
+    QUEUE_CONNECTION: sqs
+    SQS_QUEUE: ${construct:jobs.queueUrl}
 
-        MAIL_MAILER: mailgun
-        MAILGUN_DOMAIN: mail.robmellett.com
-        MAILGUN_SECRET: ${ssm:/bref-demo-dev/MAILGUN_SECRET}
+    MAIL_MAILER: mailgun
+    MAILGUN_DOMAIN: mail.robmellett.com
+    MAILGUN_SECRET: ${ssm:/bref-demo-dev/MAILGUN_SECRET}
 
-        AWS_BUCKET: !Ref Storage
-        FILESYSTEM_DISK: 's3'
+    AWS_BUCKET: !Ref Storage
+    FILESYSTEM_DISK: "s3"
 
-    iam:
-      role:
-        statements:
-          # Allow Lambda to read and write files in the S3 buckets
-          - Effect: Allow
-            Action: s3:*
-            Resource:
-              - !Sub '${Storage.Arn}' # the storage bucket
-              - !Sub '${Storage.Arn}/*' # and everything inside
+  iam:
+    role:
+      statements:
+        # Allow Lambda to read and write files in the S3 buckets
+        - Effect: Allow
+          Action: s3:*
+          Resource:
+            - !Sub "${Storage.Arn}" # the storage bucket
+            - !Sub "${Storage.Arn}/*" # and everything inside
 
 package:
-    # Files and directories to exclude from deployment
-    patterns:
-        - '!node_modules/**'
-        - '!public/storage'
-        - '!resources/assets/**'
-        - '!storage/**'
-        - '!tests/**'
+  # Files and directories to exclude from deployment
+  patterns:
+    - "!node_modules/**"
+    - "!public/storage"
+    - "!resources/assets/**"
+    - "!storage/**"
+    - "!tests/**"
 
 functions:
+  # This function runs the Laravel website/API
+  web:
+    handler: public/index.php
+    runtime: php-81-fpm
+    timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
+    events:
+      - httpApi: "*"
 
-    # This function runs the Laravel website/API
-    web:
-        handler: public/index.php
-        runtime: php-81-fpm
-        timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
-        events:
-            - httpApi: '*'
-
-    # This function lets us run artisan commands in Lambda
-    artisan:
-        handler: artisan
-        runtime: php-81-console
-        timeout: 720 # in seconds
-        # Uncomment to also run the scheduler every minute
-        #events:
-        #    - schedule:
-        #          rate: rate(1 minute)
-        #          input: '"schedule:run"'
+  # This function lets us run artisan commands in Lambda
+  artisan:
+    handler: artisan
+    runtime: php-81-console
+    timeout: 720 # in seconds
+    # Uncomment to also run the scheduler every minute
+    #events:
+    #    - schedule:
+    #          rate: rate(1 minute)
+    #          input: '"schedule:run"'
 
 constructs:
   website:
@@ -77,9 +76,9 @@ constructs:
     domain: bref-demo-dev.robmellett.dev
     certificate: arn:aws:acm:us-east-1:257920988106:certificate/e84ceda9-9956-4cb3-bff5-cafaaa643bc8
     assets:
-      '/build/*': 'public/build'
-      '/favicon.ico': public/favicon.ico
-      '/robots.txt': public/robots.txt
+      "/build/*": "public/build"
+      "/favicon.ico": public/favicon.ico
+      "/robots.txt": public/robots.txt
     # add here any file or directory that needs to be served from S3
     # Laravel uses some headers that are not in CloudFront's default whitelist.
     # To add any, we need to list all accepted headers to pass through.
@@ -116,10 +115,9 @@ plugins:
   - serverless-lift
   - serverless-domain-manager
 
-
 custom:
   customDomain:
-    domainName: bref-demo.robmellett.dev
-    basePath: ''
+    domainName: bref-demo-dev.robmellett.dev
+    basePath: ""
     stage: ${sls:stage}
     createRoute53Record: true
