@@ -39,36 +39,36 @@ You can view the web lambda at [https://bref-demo.robmellett.dev/](https://bref-
 You can test the artisan lambda with the following command.
 
 ```shell
-serverless bref -a "inspire"
+serverless bref:-a "inspire"
 ```
 
 ### Testing the database
 If you are using Postgres, make sure to copy the `php/conf.d/php.ini` file.
 
 ```shell
-serverless bref cli -a "check:database"
+serverless bref:cli -a "check:database"
 ```
 
 ### Testing the SQS Queue
 Test the queue with the following command:
 
 ```shell
-bref cli -a "check:queue"
+serverless bref:cli -a "check:queue"
 ```
 
 ### Testing the Mail Driver
 
 ```shell
-bref cli -a "check:queue"
+serverless bref:cli -a "check:queue"
 ```
 
 ### Testing the Cache Driver
-View the [cache](https://bref-demo.robmellett.dev/cache) route, and you should see the current server time.  Refresh a few seconds later and `cached` variable should be in the past.
+View the [cache](https://bref-demo-dev.robmellett.dev/cache) route, and you should see the current server time.  Refresh a few seconds later and `cached` variable should be in the past.
 
 ### Checking S3 Filesystem
 
 ```shell
-bref cli -a "check-s3"
+serverless bref:cli -a "check-s3"
 ```
 
 ## Installation
